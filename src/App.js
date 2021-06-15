@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import moment from "moment";
+import { mockData } from "./mock";
+import { useState } from "react";
+import {
+  WeatherSection,
+  CityHeading,
+  AddToMyLocationsButton,
+} from "./components/styled";
+import TabsComponent from "./components/Tabs";
+import { useEffect } from "react/cjs/react.production.min";
 
-function App() {
+const data = mockData.daily.map((item) => ({
+  icon: item.weather[0].icon,
+  day: Math.round(item.temp.day),
+  night: Math.round(item.temp.night),
+  description: item.weather[0].description,
+  main: item.weather[0].main,
+  dt: moment.unix(item.dt).format("ddd Do"),
+}));
+
+const App = () => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  // const [data2, setData2] = useState({});
+  // useEffect(() => {
+  //   fetch(
+  //     `https://api.openweathermap.org/data/2.5/onecall?lat=32.0853&lon=34.7818&exclude=minutely,hourly&appid=41a71378f37589c7554157dce6062819`
+  //   )
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       }
+  //     })
+  //     .then((response) => setData2(response));
+  // });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <WeatherSection>
+      <CityHeading>Tel Aviv</CityHeading>
+      <AddToMyLocationsButton>+ Add to my locations</AddToMyLocationsButton>
+      <TabsComponent {...{ data, selectedIndex, setSelectedIndex }} />
+    </WeatherSection>
   );
-}
+};
 
 export default App;
